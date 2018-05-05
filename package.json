@@ -1,0 +1,20 @@
+{
+  "name": "pr-dashboard",
+  "version": "1.0.0",
+  "description": "Pull Request Dashboard",
+  "main": "server.js",
+  "repository": "git@github.com:dkm-coder/pr-dashboard.git",
+  "author": "g0g11 <goran.plavsic@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "mongoose": "^5.0.17",
+    "morgan": "^1.9.0"
+  },
+  "engines": {
+    "node": "8.11.1"
+  }
+}
