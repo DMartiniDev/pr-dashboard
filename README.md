@@ -1,1 +1,1 @@
-# pr-dashboard
+# Pull Request Dashboard
