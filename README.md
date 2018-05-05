@@ -9,6 +9,12 @@
 * Create a ``.env`` file in the root folder with the required keys. You can find an example in ``.env.example``.
  
 #### Deploy to Heroku
+To deploy the Pull Request Dashboard to Heroku, follow the following steps:
+* Install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-command-line)
+* Change to project directory and be sure to login with your Heroku credentials ``heroku login``
+* Add the Heroku Remote Repository to your git config ``heroku git:remote -a pr-dashboard-server``
+* Push the repository to Heroku ``git push heroku master``
+* Add Config variables on Heroku. Select Project > Settings > Config Vars. You can compare the config variables with .env.example.
 
 ## API
 To use the API, you can check the documentation [here](https://prdashboard1.docs.apiary.io/).
