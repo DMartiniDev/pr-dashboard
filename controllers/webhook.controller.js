@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Pullrequest = mongoose.model('pullrequests');
 const Repository = mongoose.model('repositories');
 
-// TODO: Accept only requests which are coming from Github & check the Secret
 module.exports.newEvent = async (req, res) => {
   const { id, html_url, url, state, title, body, comments, user, created_at, updated_at, closed_at, merged_at } = req.body.pull_request;
   const existPullrequest = await Pullrequest.findOne({ githubId: id });
