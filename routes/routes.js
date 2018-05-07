@@ -1,6 +1,7 @@
 const authGithubController = require('../controllers/auth.github.controller');
 const webhookController = require('../controllers/webhook.controller');
 const pullrequestController = require('../controllers/pullrequest.controller');
+const webSocketController = require('../controllers/websockets.controller');
 
 module.exports = app => {
   // Authentication
@@ -11,4 +12,6 @@ module.exports = app => {
 
   // Github Webhooks
   app.post('/api/v1/repo/webhook', webhookController.newEvent);
+  
+  app.get('/pr-update', webSocketController.test);
 };
