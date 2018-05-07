@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Pullrequest = mongoose.model('pullrequests');
 
 module.exports.newEvent = async (req, res) => {
-  console.log(req.body.payload);
+  console.log(req.body);
   try {
     const pullrequest = new Pullrequest({
       githubId: req.body.payload.pull_request.id,
