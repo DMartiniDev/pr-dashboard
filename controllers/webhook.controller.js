@@ -31,7 +31,6 @@ module.exports.newEvent = async (req, res) => {
 
       await pullrequest.save();
 
-      // Add pull request to Repository
       await Repository.findOneAndUpdate({ githubId: req.body.repository.id }, {
         $push: {
           pullRequests: pullrequest._id,
@@ -43,6 +42,7 @@ module.exports.newEvent = async (req, res) => {
       res.status(400).send(e);
     }
   } else {
+    existPullrequest.update()
     res.status(409).send({
       message: 'Pull request already exist.',
     });
