@@ -20,9 +20,7 @@ mongoose.connect(keys.mongoURI)
 
 // Middlewares
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true,
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 // Routes
