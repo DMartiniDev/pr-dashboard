@@ -4,31 +4,35 @@ const Repository = mongoose.model('repositories');
 
 // TODO: Accept only requests which are coming from Github & check the Secret
 module.exports.newEvent = async (req, res) => {
-  const existPullrequest = await Pullrequest.findOne({ githubId: req.body.pull_request.id });
+  console.log(req.headers);
+  const { id, html_url, url, state, title, body, comments, user, created_at, updated_at, closed_at, merged_at } = req.body.pull_request;
+  const existPullrequest = await Pullrequest.findOne({ githubId: id });
+  const values = {
+    githubId: id,
+    action: req.body.action,
+    number: req.body.number,
+    webUrl: html_url,
+    apiUrl: url,
+    state: state,
+    title: title,
+    comment: body,
+    comments: comments,
+    user: {
+      githubId: user.id,
+      loginName: user.login,
+      picture: user.avatar_url,
+      apiUrl: user.url,
+      webUrl: user.html_url,
+    },
+    created_at: created_at,
+    updated_at: updated_at,
+    closed_at: closed_at,
+    merged_at: merged_at,
+  };
+
   if (!existPullrequest) {
     try {
-      const pullrequest = new Pullrequest({
-        githubId: req.body.pull_request.id,
-        action: req.body.action,
-        number: req.body.number,
-        webUrl: req.body.pull_request.html_url,
-        apiUrl: req.body.pull_request.url,
-        state: req.body.pull_request.state,
-        title: req.body.pull_request.title,
-        comment: req.body.pull_request.body,
-        user: {
-          githubId: req.body.pull_request.user.id,
-          loginName: req.body.pull_request.user.login,
-          picture: req.body.pull_request.user.avatar_url,
-          apiUrl: req.body.pull_request.user.url,
-          webUrl: req.body.pull_request.user.html_url,
-        },
-        created_at: req.body.pull_request.created_at,
-        updated_at: req.body.pull_request.updated_at,
-        closed_at: req.body.pull_request.closed_at,
-        merged_at: req.body.pull_request.merged_at,
-      });
-
+      const pullrequest = new Pullrequest(values);
       await pullrequest.save();
 
       await Repository.findOneAndUpdate({ githubId: req.body.repository.id }, {
@@ -37,14 +41,16 @@ module.exports.newEvent = async (req, res) => {
         },
       });
 
-      res.status(201).send(pullrequest);
+      res.status(201).send({ message: 'Pull request created.' });
     } catch (e) {
       res.status(400).send(e);
     }
   } else {
-    existPullrequest.update()
-    res.status(409).send({
-      message: 'Pull request already exist.',
-    });
+    try {
+      await existPullrequest.update(values);
+      res.status(201).send({ message: 'Pull request updated.' });
+    } catch (e) {
+      res.status(400).send(e);
+    };
   }
 };
