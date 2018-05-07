@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser');
 const authGithubController = require('../controllers/auth.github.controller');
 const webhookController = require('../controllers/webhook.controller');
 const pullrequestController = require('../controllers/pullrequest.controller');
