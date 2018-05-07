@@ -1,4 +1,5 @@
-const Pullrequest = require('../models/Pullrequest');
+const mongoose = require('mongoose');
+const Pullrequest = mongoose.model('pullrequests');
 
 module.exports.newEvent = async (req, res) => {
   try {

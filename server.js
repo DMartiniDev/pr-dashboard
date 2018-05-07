@@ -10,6 +10,12 @@ const keys = require('./config/keys');
 // Initialize Express App
 const app = express();
 
+// Mongoose models
+require('./models/Pullrequest');
+require('./models/Repository');
+require('./models/Organisation');
+require('./models/User');
+
 // Connect to MongoDB
 mongoose.connect(keys.mongoURI)
   .then(() => console.log('MongoDB connected.'))

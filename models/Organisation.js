@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const organisationSchema = new Schema({
-  githubId: { String, required: true },
-  login: { String, required: true },
-  apiUrl: { String, required: true },
-  hookUrl: { String, required: true },
-  picture: { String },
+  githubId: { type: String, required: true },
+  login: { type: String, required: true },
+  apiUrl: { type: String, required: true },
+  hookUrl: { type: String, required: true },
+  picture: { type: String },
   _repositories: [
     {
       hookEnabled: { type: Boolean },
