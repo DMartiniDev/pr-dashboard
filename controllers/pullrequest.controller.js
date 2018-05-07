@@ -8,4 +8,4 @@ module.exports.listAll = async (req, res) => {
   } catch (e) {
     res.status(400).send(e);
   }
-}
+};
