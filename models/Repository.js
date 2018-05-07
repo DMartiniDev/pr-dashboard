@@ -11,6 +11,11 @@ const repositorySchema = new Schema({
   hookUrl: { type: String, required: true },
   pullUrl: { type: String, required: true },
   description: { type: String },
+  pullRequests: [
+    {
+      pullRequest: { type: Schema.Types.ObjectId, ref: 'pullrequests' },
+    },
+  ],
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
 });
