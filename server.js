@@ -7,6 +7,12 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const keys = require('./config/keys');
 
+// Mongoose models
+require('./models/Pullrequest');
+require('./models/Repository');
+require('./models/Organisation');
+require('./models/User');
+
 // Connect to MongoDB
 mongoose.connect(keys.mongoURI)
   .then(() => console.log('MongoDB connected.'))
@@ -14,6 +20,9 @@ mongoose.connect(keys.mongoURI)
 
 // Middlewares
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true,
+}));
 app.use(morgan('dev'));
 
 // Routes
