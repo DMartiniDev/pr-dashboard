@@ -10,6 +10,7 @@ const pullrequestSchema = new Schema({
   state: { type: String, required: true },
   title: { type: String },
   comment: { type: String },
+  comments: { type: String },
   user: {
     githubId: { type: String },
     loginName: { type: String, required: true, lowercase: true },
