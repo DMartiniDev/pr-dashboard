@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   const reqUserAgent = req.headers['user-agent'].match(/.+?\//gi).toString();
 
   const requestSignature = req.headers['x-hub-signature'];
-  let hmac = crypto.createHmac('sha1', keys.githubSecret);
+  let hmac = crypto.createHmac('sha1', keys.githubWebhookSecret);
   hmac.update(JSON.stringify(req.body));
   const calculatedSignature = 'sha1=' + hmac.digest('hex');
 
