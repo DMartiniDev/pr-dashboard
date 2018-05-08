@@ -30,14 +30,13 @@ module.exports.newEvent = async (req, res) => {
 
   if (!existPullrequest) {
     try {
+      const repo = await Repository.findOne({ githubId: req.body.repository.id });
+      values.repository = repo;
+
       const pullrequest = new Pullrequest(values);
       await pullrequest.save();
 
-      await Repository.findOneAndUpdate({ githubId: req.body.repository.id }, {
-        $push: {
-          pullRequests: pullrequest._id,
-        },
-      });
+      await repo.update({ $push: { pullRequests: { pullRequest: pullrequest._id } } });
 
       res.status(201).send({ message: 'Pull request created.' });
     } catch (e) {

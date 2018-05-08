@@ -18,6 +18,7 @@ const pullrequestSchema = new Schema({
     apiUrl: { type: String },
     webUrl: { type: String },
   },
+  repository: { type: Schema.Types.ObjectId, ref: 'repositories' },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
   closed_at: { type: Date, default: null },

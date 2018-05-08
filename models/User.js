@@ -14,7 +14,6 @@ const userSchema = new Schema({
   updated_at: { type: Date, default: Date.now },
   _repositories: [
     {
-      hookEnabled: { type: Boolean },
       repository: { type: Schema.Types.ObjectId, ref: 'repositories' },
     },
   ],
