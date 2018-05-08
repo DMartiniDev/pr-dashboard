@@ -59,3 +59,27 @@ module.exports.test = (req, res) => {
 
   res.status(200).send('Updated data for PRs has been sent');
 };
+
+module.exports.reposUpdate = (req, res) => {
+    io.emit('repos-update', [
+        {
+            "_id": "5af0778b2bf32a1ebf79c56a",
+            "name": "pr-dashboard",
+            "fullName": "dkm-coder/pr-dashboard",
+            "private": true,
+            "webUrl": "https://github.com/dkm-coder/pr-dashboard",
+            "hookEnabled": false,
+            "description": "Github Pull Request Dashboard"
+        },
+        {
+            "_id": "123456789098765432123456",
+            "name": "pr-dashboard-client",
+            "fullName": "carrmelo/pr-dashboard-client",
+            "private": false,
+            "webUrl": "https://github.com/carrmelo/pr-dashboard-client",
+            "hookEnabled": true,
+            "description": "Client for PR Dashboard"
+        }
+    ]);
+    res.status(200).send('Updated data for repositories has been sent');
+};

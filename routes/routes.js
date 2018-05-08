@@ -19,4 +19,5 @@ module.exports = app => {
 
   // Temporary Websockets communication
   app.get('/pr-update', webSocketController.test);
+  app.get('/repos-update', webSocketController.reposUpdate);
 };
