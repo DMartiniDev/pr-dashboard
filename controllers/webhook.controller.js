@@ -51,3 +51,21 @@ module.exports.newEvent = async (req, res) => {
     };
   }
 };
+
+module.exports.enable = async (req, res) => {
+  try {
+    await Repository.findOneAndUpdate({ _id: req.params.id }, { hookEnabled: true });
+    res.status(200).send({ message: 'successful enabled' });
+  } catch (e) {
+    res.status(400).send(e);
+  }
+};
+
+module.exports.disable = async (req, res) => {
+  try {
+    await Repository.findOneAndUpdate({ _id: req.params.id }, { hookEnabled: false });
+    res.status(200).send({ message: 'successful disabled' });
+  } catch(e) {
+    res.status(400).send(e);
+  }
+};
