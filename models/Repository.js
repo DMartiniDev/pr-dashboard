@@ -11,8 +11,10 @@ const repositorySchema = new Schema({
   hookUrl: { type: String, required: true },
   pullUrl: { type: String, required: true },
   description: { type: String },
+  hookEnabled: { type: Boolean },
   pullRequests: [
     {
+      _id: false,
       pullRequest: { type: Schema.Types.ObjectId, ref: 'pullrequests' },
     },
   ],
