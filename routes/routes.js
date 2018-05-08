@@ -13,6 +13,8 @@ module.exports = app => {
 
   // Github Webhooks
   app.post('/api/v1/repo/webhook', githubMiddleware, webhookController.newEvent);
+  app.patch('/api/v1/repo/:id/enable', webhookController.enable);
+  app.patch('/api/v1/repo/:id/disable', webhookController.disable);
 
   app.get('/pr-update', webSocketController.test);
 };
