@@ -16,8 +16,8 @@ module.exports = app => {
 
   // Github Webhooks
   app.post('/v1/webhooks', githubMiddleware, webhookController.newEvent);
-  app.patch('/v1/repos/:id/enable', webhookController.enable);
-  app.patch('/v1/repos/:id/disable', webhookController.disable);
+  app.patch('/v1/repos/:id/enable', requireAuth(), webhookController.enable);
+  app.patch('/v1/repos/:id/disable', requireAuth(), webhookController.disable);
 
   // Temporary Websockets communication
   app.get('/pr-update', webSocketController.test);

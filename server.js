@@ -27,7 +27,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(passport.initialize());
-app.use(passport.session());
 
 // Routes
 require('./routes/routes')(app);
