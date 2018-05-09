@@ -4,13 +4,7 @@ const webhookController = require('../controllers/webhook.controller');
 const pullrequestController = require('../controllers/pullrequest.controller');
 const webSocketController = require('../controllers/websockets.controller');
 const githubMiddleware = require('../middleware/github');
-// const requireAuth = require('../middleware/requireAuth');
-const passportService = require('../services/passport');
-const passport = require('passport');
-
-// Temporary
-const requireAuth = passport.authenticate(['jwt'], { session: false });
-// =====
+const requireAuth = require('../middleware/requireAuth');
 
 module.exports = app => {
   // Authentication
@@ -18,7 +12,7 @@ module.exports = app => {
   app.get('/v1/auth/callback', authGithubController.callback(), authJwtController.generateUserToken);
 
   // Pull requests
-  app.get('/v1/pullrequests', requireAuth, pullrequestController.listAll);
+  app.get('/v1/pullrequests', requireAuth(), pullrequestController.listAll);
 
   // Github Webhooks
   app.post('/v1/webhooks', githubMiddleware, webhookController.newEvent);

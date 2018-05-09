@@ -7,10 +7,15 @@ function generateAccessToken(userId) {
   const audience = keys.jsonWebTokenAudience;
   const secret = keys.jsonWebTokenSecret;
 
-  const token = jwt.sign({}, secret, { expiresIn, audience, issuer, subject: userId.toString() });
+  const token = jwt.sign({}, secret, {
+    expiresIn,
+    audience,
+    issuer,
+    subject: userId.toString(),
+  });
 
   return token;
-};
+}
 
 module.exports.generateUserToken = (req, res) => {
   const accessToken = generateAccessToken(req.user.id);
