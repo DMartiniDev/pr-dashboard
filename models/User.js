@@ -4,9 +4,8 @@ const { Schema } = mongoose;
 const userSchema = new Schema({
   githubId: { type: String },
   loginName: { type: String, required: true, lowercase: true },
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-  email: { type: String, required: true, lowercase: true },
+  displayName: { type: String },
+  email: { type: String, lowercase: true },
   picture: { type: String },
   apiUrl: { type: String },
   webUrl: { type: String },
