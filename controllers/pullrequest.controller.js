@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
-const Pullrequest = mongoose.model('pullrequests');
+const User = mongoose.model('users');
 
 module.exports.listAll = async (req, res) => {
   try {
-    const pullrequests = await Pullrequest.find({});
+    const pullrequests = await User
+      .find({ _id: req.user.id })
+      .populate({
+        path: '_repositories.repository',
+        populate: {
+          path: '_pullRequests.pullRequest',
+        },
+      });
     res.status(200).send(pullrequests);
   } catch (e) {
     res.status(400).send(e);
