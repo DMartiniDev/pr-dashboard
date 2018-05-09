@@ -2,6 +2,7 @@ const { app, http } = require('./setupServer.js');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const passport = require('passport');
 
 // Load environment configurations
 require('dotenv').config();
@@ -13,6 +14,9 @@ require('./models/Repository');
 require('./models/Organisation');
 require('./models/User');
 
+// authentication services
+require('./services/passport');
+
 // Connect to MongoDB
 mongoose.connect(keys.mongoURI)
   .then(() => console.log('MongoDB connected.'))
@@ -22,6 +26,8 @@ mongoose.connect(keys.mongoURI)
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 require('./routes/routes')(app);
