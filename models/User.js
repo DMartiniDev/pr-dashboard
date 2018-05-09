@@ -9,6 +9,12 @@ const userSchema = new Schema({
   picture: { type: String },
   apiUrl: { type: String },
   webUrl: { type: String },
+  permissions: {
+    public: { type: Boolean, default: true },
+    private: { type: Boolean, default: false },
+    org: { type: Boolean, default: false },
+  },
+  accessToken: { type: String },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
   _repositories: [
