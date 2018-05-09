@@ -27,12 +27,5 @@ module.exports = app => {
 
   // Temporary Websockets communication
   app.get('/pr-update', webSocketController.test);
-  app.get(
-    '/api/secure',
-    // This request must be authenticated using a JWT, or else we will fail
-    passport.authenticate(['jwt'], { session: false }),
-    (req, res) => {
-      res.send('Secure response from ' + JSON.stringify(req.user));
-    },
-  );
+  app.get('/repos-update', webSocketController.reposUpdate);
 };
