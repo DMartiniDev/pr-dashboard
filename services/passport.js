@@ -46,7 +46,10 @@ passport.use(new GitHubStrategy(
   async (accessToken, refreshToken, profile, done) => {
     try {
       const existingUser = await User.findOne({ githubId: profile._json.id });
-      if (existingUser) return done(null, existingUser);
+      if (existingUser) {
+        await existingUser.update({ $set: { accessToken } });
+        return done(null, existingUser);
+      }
 
       const user = await new User({
         githubId: profile._json.id,
@@ -55,6 +58,7 @@ passport.use(new GitHubStrategy(
         picture: profile._json.avatar_url,
         apiUrl: profile._json.url,
         webUrl: profile._json.html_url,
+        accessToken: accessToken,
         created_at: profile._json.created_at,
         updated_at: profile._json.updated_at,
       }).save();

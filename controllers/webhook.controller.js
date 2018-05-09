@@ -36,7 +36,7 @@ module.exports.newEvent = async (req, res) => {
       const pullrequest = new Pullrequest(values);
       await pullrequest.save();
 
-      await repo.update({ $push: { pullRequests: { pullRequest: pullrequest._id } } });
+      await repo.update({ $push: { _pullRequests: { pullRequest: pullrequest._id } } });
 
       res.status(201).send({ message: 'Pull request created.' });
     } catch (e) {
