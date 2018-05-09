@@ -24,13 +24,15 @@ passport.use(new JwtStrategy(
     audience: keys.jsonWebTokenAudience,
   },
   async (payload, done) => {
-    console.log('payload', payload.sub);
-    const user = await User.findById(payload.sub);
-    console.log(user);
-    if (user) {
-      done(null, user);
-    } else {
-      done(null, false);
+    try {
+      const user = await User.findById(payload.sub);
+      if (user) {
+        done(null, user);
+      } else {
+        done(null, false);
+      }
+    } catch (e) {
+      return done(e, false);
     }
   })
 );
@@ -42,19 +44,23 @@ passport.use(new GitHubStrategy(
     callbackUrl: '/v1/auth/callback',
   },
   async (accessToken, refreshToken, profile, done) => {
-    const existingUser = await User.findOne({ githubId: profile._json.id });
-    if (existingUser) return done(null, existingUser);
+    try {
+      const existingUser = await User.findOne({ githubId: profile._json.id });
+      if (existingUser) return done(null, existingUser);
 
-    const user = await new User({
-      githubId: profile._json.id,
-      loginName: profile._json.login,
-      displayName: profile._json.name,
-      picture: profile._json.avatar_url,
-      apiUrl: profile._json.url,
-      webUrl: profile._json.html_url,
-      created_at: profile._json.created_at,
-      updated_at: profile._json.updated_at,
-    }).save();
-    done(null, user);
+      const user = await new User({
+        githubId: profile._json.id,
+        loginName: profile._json.login,
+        displayName: profile._json.name,
+        picture: profile._json.avatar_url,
+        apiUrl: profile._json.url,
+        webUrl: profile._json.html_url,
+        created_at: profile._json.created_at,
+        updated_at: profile._json.updated_at,
+      }).save();
+      done(null, user);
+    } catch (e) {
+      return done(e, false);
+    }
   })
 );
