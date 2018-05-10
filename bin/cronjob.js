@@ -15,17 +15,34 @@ mongoose.connect(keys.mongoURI);
 
 const BASE_URL = 'https://api.github.com';
 const PUBLIC_REPO = '/user/repos?type=public';
+const USER_EMAIL = '/user/emails';
 
 async function cronjob() {
   // Fetch all public repositories and store in DB
   const allUsers = await User.find();
   await allUsers.forEach(async user => {
-    axios.defaults.headers.common['Authorization'] =
-      'token ' + user.accessToken;
-    const fetchRepos = await axios.get(`${BASE_URL}${PUBLIC_REPO}`);
+    const axiosConfig = {
+      headers: { Authorization: 'token ' + user.accessToken },
+    };
+
+    const fetchRepos = await axios.get(
+      `${BASE_URL}${PUBLIC_REPO}`,
+      axiosConfig,
+    );
+    const fetchEmail = await axios.get(
+      `${BASE_URL}${USER_EMAIL}`,
+      axiosConfig,
+    );
+
+    // Update user data
+    await user.update({
+      email: fetchEmail.data[0].email,
+    });
 
     fetchRepos.data.forEach(async publicRepos => {
-      const existingRepo = await Repository.findOne({ githubId: publicRepos.id });
+      const existingRepo = await Repository.findOne({
+        githubId: publicRepos.id,
+      });
 
       const values = {
         githubId: publicRepos.id,
@@ -43,15 +60,35 @@ async function cronjob() {
       };
 
       if (!existingRepo) {
-        await new Repository(values).save();
-        await user.update({ $push: { _repositories: { repository: publicRepos._id } } });
-        // Add a webhook to the Repository
+        const newRepo = await new Repository(values).save();
+        await user.update({
+          $push: { _repositories: { repository: newRepo._id } },
+        });
+
+        // Create new Webhook
+        const webhookData = {
+          name: 'web',
+          active: true,
+          events: ['pull_request'],
+          config: {
+            url: keys.githubWebhookUrl,
+            content_type: 'json',
+            secret: keys.githubWebhookSecret,
+          },
+        };
+
+        await axios.post(publicRepos.hooks_url, webhookData, axiosConfig);
       } else {
         await existingRepo.update(values);
       }
     });
   });
-  console.log('Cronjob finished!')
-};
+  console.log('Cronjob successful finished!');
+}
+
+// Handle Promise rejection
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at:', p, 'reason:', reason);
+});
 
 cronjob();
