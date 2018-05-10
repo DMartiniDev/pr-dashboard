@@ -7,7 +7,7 @@
 * Clone the repository with ``git clone <repository url>``
 * Install the dependencies ``yarn install``
 * Create a ``.env`` file in the root folder with the required keys. You can find an example in ``.env.example``.
-* To fetch all initial information from GitHub execute ``node ./services/cronjob.js``
+* To fetch all initial information from GitHub execute ``node ./bin/cronjob.js``
  
 #### Deploy to Heroku
 To deploy the Pull Request Dashboard to Heroku, follow the following steps:
@@ -16,6 +16,7 @@ To deploy the Pull Request Dashboard to Heroku, follow the following steps:
 * Add the Heroku Remote Repository to your git config ``heroku git:remote -a pr-dashboard-server``
 * Push the repository to Heroku ``git push heroku master``
 * Add Config variables on Heroku. Select Project > Settings > Config Vars. You can compare the config variables with .env.example.
+* Install [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler) as an Add-on in your Heroku Environment. Add ``cronjob.js`` (only the filename, NOT the full path) to the scheduler to be executed every 10 minutes. 
 
 ## API
 To use the API, you can check the documentation [here](https://prdashboard1.docs.apiary.io/).
