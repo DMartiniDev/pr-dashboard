@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const keys = require('../config/keys');
 const mongoose = require('mongoose');
 const axios = require('axios');
@@ -49,6 +51,7 @@ async function cronjob() {
       }
     });
   });
+  console.log('Cronjob finished!')
 };
 
 cronjob();

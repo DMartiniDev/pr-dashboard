@@ -7,7 +7,7 @@
 * Clone the repository with ``git clone <repository url>``
 * Install the dependencies ``yarn install``
 * Create a ``.env`` file in the root folder with the required keys. You can find an example in ``.env.example``.
-* To fetch all initial information from GitHub execute ``node ./services/cronjob.js``
+* To fetch all initial information from GitHub execute ``node ./bin/cronjob.js``
  
 #### Deploy to Heroku
 To deploy the Pull Request Dashboard to Heroku, follow the following steps:
