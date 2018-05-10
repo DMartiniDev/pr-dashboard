@@ -60,9 +60,9 @@ async function cronjob() {
       };
 
       if (!existingRepo) {
-        await new Repository(values).save();
+        const newRepo = await new Repository(values).save();
         await user.update({
-          $push: { _repositories: { repository: publicRepos._id } },
+          $push: { _repositories: { repository: newRepo._id } },
         });
 
         // Create new Webhook
