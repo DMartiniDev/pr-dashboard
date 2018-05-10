@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const User = mongoose.model('users');
+const Raven = require('raven');
+
+require('../services/raven');
 
 module.exports.listAll = async (req, res) => {
   try {
@@ -13,6 +16,7 @@ module.exports.listAll = async (req, res) => {
       });
     res.status(200).send(pullrequests);
   } catch (e) {
+    Raven.captureException(e);
     res.status(400).send(e);
   }
 };
