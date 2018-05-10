@@ -78,7 +78,8 @@ async function cronjob() {
           },
         };
 
-        await axios.post(publicRepos.hooks_url, webhookData, axiosConfig);
+        const webhook = await axios.post(publicRepos.hooks_url, webhookData, axiosConfig);
+        await newRepo.update({ hookId: webhook.data.id });
       } else {
         await existingRepo.update(values);
       }

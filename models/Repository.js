@@ -9,6 +9,7 @@ const repositorySchema = new Schema({
   webUrl: { type: String, required: true },
   apiUrl: { type: String, required: true },
   hookUrl: { type: String, required: true },
+  hookId: { type: String },
   pullUrl: { type: String, required: true },
   description: { type: String },
   language: { type: String },
