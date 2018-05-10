@@ -55,6 +55,7 @@ async function cronjob() {
         pullUrl: publicRepos.pulls_url,
         description: publicRepos.description,
         language: publicRepos.language,
+        owner: user._id,
         created_at: publicRepos.created_at,
         updated_at: publicRepos.updated_at,
       };
@@ -77,7 +78,8 @@ async function cronjob() {
           },
         };
 
-        await axios.post(publicRepos.hooks_url, webhookData, axiosConfig);
+        const webhook = await axios.post(publicRepos.hooks_url, webhookData, axiosConfig);
+        await newRepo.update({ hookId: webhook.data.id });
       } else {
         await existingRepo.update(values);
       }
