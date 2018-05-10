@@ -3,6 +3,9 @@ const Pullrequest = mongoose.model('pullrequests');
 const Repository = mongoose.model('repositories');
 const axios = require('axios');
 const keys = require('../config/keys');
+const Raven = require('raven');
+
+require('../services/raven');
 
 module.exports.newEvent = async (req, res) => {
   const {
@@ -59,6 +62,7 @@ module.exports.newEvent = async (req, res) => {
 
       res.status(201).send({ message: 'Pull request created.' });
     } catch (e) {
+      Raven.captureException(e);
       res.status(400).send(e);
     }
   } else {
@@ -66,6 +70,7 @@ module.exports.newEvent = async (req, res) => {
       await existPullrequest.update(values);
       res.status(201).send({ message: 'Pull request updated.' });
     } catch (e) {
+      Raven.captureException(e);
       res.status(400).send(e);
     }
   }
@@ -102,8 +107,7 @@ module.exports.enable = async (req, res) => {
 
     res.status(204).send();
   } catch (e) {
-    // TODO: enable Raven!
-    // Raven.captureException(e);
+    Raven.captureException(e);
     res.status(500).send();
   }
 };
@@ -129,9 +133,8 @@ module.exports.disable = async (req, res) => {
     });
 
     res.status(204).send();
-  } catch (e) {
-    // TODO: enable Raven!
-    // Raven.captureException(e);
+  } catch(e) {
+    Raven.captureException(e);
     res.status(500).send();
   }
 };
