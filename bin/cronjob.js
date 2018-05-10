@@ -55,6 +55,7 @@ async function cronjob() {
         pullUrl: publicRepos.pulls_url,
         description: publicRepos.description,
         language: publicRepos.language,
+        owner: user._id,
         created_at: publicRepos.created_at,
         updated_at: publicRepos.updated_at,
       };
