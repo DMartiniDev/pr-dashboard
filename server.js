@@ -17,6 +17,9 @@ require('./models/User');
 // authentication services
 require('./services/passport');
 
+// Error Notification Service
+require('./services/raven');
+
 // Connect to MongoDB
 mongoose.connect(keys.mongoURI)
   .then(() => console.log('MongoDB connected.'))

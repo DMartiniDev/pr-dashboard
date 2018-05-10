@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const Pullrequest = mongoose.model('pullrequests');
 const Repository = mongoose.model('repositories');
+const Raven = require('raven');
+
+require('../services/raven');
 
 module.exports.newEvent = async (req, res) => {
   const { id, html_url, url, state, title, body, comments, user, created_at, updated_at, closed_at, merged_at } = req.body.pull_request;
@@ -40,6 +43,7 @@ module.exports.newEvent = async (req, res) => {
 
       res.status(201).send({ message: 'Pull request created.' });
     } catch (e) {
+      Raven.captureException(e);
       res.status(400).send(e);
     }
   } else {
@@ -47,6 +51,7 @@ module.exports.newEvent = async (req, res) => {
       await existPullrequest.update(values);
       res.status(201).send({ message: 'Pull request updated.' });
     } catch (e) {
+      Raven.captureException(e);
       res.status(400).send(e);
     };
   }
@@ -57,6 +62,7 @@ module.exports.enable = async (req, res) => {
     await Repository.findOneAndUpdate({ _id: req.params.id }, { hookEnabled: true });
     res.status(204).send();
   } catch (e) {
+    Raven.captureException(e);
     res.status(400).send(e);
   }
 };
@@ -66,6 +72,7 @@ module.exports.disable = async (req, res) => {
     await Repository.findOneAndUpdate({ _id: req.params.id }, { hookEnabled: false });
     res.status(204).send();
   } catch(e) {
+    Raven.captureException(e);
     res.status(400).send(e);
   }
 };
