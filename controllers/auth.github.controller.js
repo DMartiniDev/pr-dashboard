@@ -6,7 +6,7 @@ require('../models/User');
 module.exports.auth = () => {
   return passport.authenticate('github', {
     session: false,
-    scope: ['user:email', 'repo:status', 'admin:repo_hook'],
+    scope: ['user:email', 'public_repo'],
   });
 };
 
