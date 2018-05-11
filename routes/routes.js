@@ -2,6 +2,7 @@ const authGithubController = require('../controllers/auth.github.controller');
 const authJwtController = require('../controllers/auth.jwt.controller');
 const webhookController = require('../controllers/webhook.controller');
 const pullrequestController = require('../controllers/pullrequest.controller');
+const repoController = require('../controllers/repo.controller');
 const webSocketController = require('../controllers/websockets.controller');
 const githubMiddleware = require('../middleware/github');
 const requireAuth = require('../middleware/requireAuth');
@@ -13,6 +14,9 @@ module.exports = app => {
 
   // Pull requests
   app.get('/v1/pullrequests', requireAuth(), pullrequestController.listAll);
+
+  // Repositories
+  app.get('/v1/repos', requireAuth(), repoController.listAll);
 
   // Github Webhooks
   app.post('/v1/webhooks', githubMiddleware, webhookController.newEvent);
