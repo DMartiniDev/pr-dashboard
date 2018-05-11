@@ -11,6 +11,7 @@ const pullrequestSchema = new Schema({
   title: { type: String },
   comment: { type: String },
   comments: { type: String },
+  owner: { type: Schema.Types.ObjectId, ref: 'users' },
   user: {
     githubId: { type: String },
     loginName: { type: String, required: true, lowercase: true },
