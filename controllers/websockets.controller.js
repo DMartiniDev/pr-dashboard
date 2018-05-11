@@ -3,57 +3,60 @@ const { io } = require('../setupServer.js');
 module.exports.test = (req, res) => {
   io.emit('pr-update', [
     {
-        "_id": "1234987655",
-        "repository": {
-            "_id": "5567894321",
-            "name": "Cool Project",
-            "fullName": "randomUser/brand-new-repo",
-            "private": false,
-            "webUrl": "https://github.com/randomUser/brand-new-repo",
-            "description": "This is a brand new repository"
-        },
-        "user": {
-            "loginName": "randomUser",
-            "picture": "https://avatars0.githubusercontent.com/u/63034?s=400&v=4sss",
-            "webUrl": "https://github.com/randomUser"
-        },
-        "closed_at": null,
-        "merged_at": null,
-        "created_at": "1999-05-07T12:43:35.000Z",
-        "updated_at": "1999-05-07T12:43:35.000Z",
-        "action": "opened",
-        "number": "5",
-        "webUrl": "https://github.com/randomUser/brand-new-repo/pull/5",
-        "state": "open",
-        "title": "Shiny new pull request!",
-        "comment": "Please review my code!",
-        "comments": "1"
-    },{
-      "_id": "abcde4321edcba1234",
+      "_id": "5af0778b2bf32a1ebf79c56f",
       "repository": {
-          "_id": "4321abcde1234edcba",
-          "name": "Custom Management App",
-          "fullName": "yetAnotherCitizen/management-app",
-          "private": false,
-          "webUrl": "https://github.com/yetAnotherCitizen/management-app",
-          "description": "Management done right"
+        "_id": "5af0778b2bf32a1ebf79c56d",
+        "name": "test",
+        "fullName": "g0g11/test",
+        "private": false,
+        "webUrl": "https://github.com/g0g11/test",
+        "description": "Test repository"
       },
       "user": {
-          "loginName": "yetAnotherCitizen",
-          "picture": "https://avatars2.githubusercontent.com/u/27972790?s=400&v=4",
-          "webUrl": "https://github.com/yetAnotherCitizen"
+        "loginName": "g0g11",
+        "picture": "https://avatars2.githubusercontent.com/u/16637843?v=4",
+        "webUrl": "https://github.com/g0g11"
       },
       "closed_at": null,
       "merged_at": null,
-      "created_at": "2002-02-07T12:43:35.000Z",
-      "updated_at": "2002-02-07T12:43:35.000Z",
+      "created_at": "2018-05-07T12:43:35.000Z",
+      "updated_at": "2018-05-07T12:43:35.000Z",
       "action": "opened",
-      "number": "1",
-      "webUrl": "https://github.com/yetAnotherCitizen/management-app/pull/1",
+      "number": "5",
+      "webUrl": "https://github.com/g0g11/test/pull/5",
       "state": "open",
-      "title": "Authentication",
-      "comment": "Implement authentication for the platform",
-      "comments": "1"
+      "title": "Final version authentication",
+      "review": true,
+      "comment": "Please review my code!",
+      "comments": "2"
+    },
+    {
+      "_id": "5af0778b2bf32a1ebf79c588",
+      "repository": {
+        "_id": "5af0778b2bf32a1ebf79c56d",
+        "name": "test",
+        "fullName": "g0g11/test",
+        "private": false,
+        "webUrl": "https://github.com/g0g11/test",
+        "description": "Test repository"
+      },
+      "user": {
+        "loginName": "g0g11",
+        "picture": "https://avatars2.githubusercontent.com/u/16637843?v=4",
+        "webUrl": "https://github.com/g0g11"
+      },
+      "closed_at": null,
+      "merged_at": null,
+      "created_at": "2018-05-07T12:43:35.000Z",
+      "updated_at": "2018-05-07T12:43:35.000Z",
+      "action": "open",
+      "number": "12",
+      "webUrl": "https://github.com/g0g11/test/pull/12",
+      "state": "opened",
+      "title": "Refactor Code",
+      "review": false,
+      "comment": "User Controller code improved!",
+      "comments": "12"
     }
   ]);
 
