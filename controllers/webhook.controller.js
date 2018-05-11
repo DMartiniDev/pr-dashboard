@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Pullrequest = mongoose.model('pullrequests');
 const Repository = mongoose.model('repositories');
+const User = mongoose.model('users');
 const axios = require('axios');
 const keys = require('../config/keys');
 const Raven = require('raven');
@@ -54,7 +55,13 @@ module.exports.newEvent = async (req, res) => {
       const repo = await Repository.findOne({
         githubId: req.body.repository.id,
       });
+
+      const owner = await User.findOne({
+        githubId: req.body.repository.owner.id,
+      });
+
       values.repository = repo;
+      values.owner = owner;
 
       const pullrequest = new Pullrequest(values);
       await pullrequest.save();
@@ -136,7 +143,7 @@ module.exports.disable = async (req, res) => {
     });
 
     res.status(204).send();
-  } catch(e) {
+  } catch (e) {
     Raven.captureException(e);
     res.status(500).send();
   }
