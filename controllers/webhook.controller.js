@@ -8,6 +8,9 @@ const Raven = require('raven');
 require('../services/raven');
 
 module.exports.newEvent = async (req, res) => {
+  // First message to test the Webhook from Github
+  if (req.body.zen && req.body.hook) return res.status(200).send();
+
   const {
     id,
     html_url,
