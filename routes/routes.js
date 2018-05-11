@@ -11,6 +11,7 @@ const requireAuth = require('../middleware/requireAuth');
 module.exports = app => {
   // Authentication
   app.get('/v1/auth/github', authGithubController.auth());
+  app.get('/v1/auth/github/private', authGithubController.private());
   app.get('/v1/auth/callback', authGithubController.callback(), authJwtController.generateUserToken);
 
   // Current User
