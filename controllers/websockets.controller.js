@@ -10,7 +10,7 @@ module.exports.test = (req, res) => {
         "fullName": "g0g11/test",
         "private": false,
         "webUrl": "https://github.com/g0g11/test",
-        "description": "Test repository"
+        "description": "One cool repo"
       },
       "user": {
         "loginName": "g0g11",
@@ -25,9 +25,9 @@ module.exports.test = (req, res) => {
       "number": "5",
       "webUrl": "https://github.com/g0g11/test/pull/5",
       "state": "open",
-      "title": "Final version authentication",
+      "title": "A brand new pull request",
       "review": true,
-      "comment": "Please review my code!",
+      "comment": "Look at me!",
       "comments": "2"
     },
     {
@@ -53,9 +53,9 @@ module.exports.test = (req, res) => {
       "number": "12",
       "webUrl": "https://github.com/g0g11/test/pull/12",
       "state": "opened",
-      "title": "Refactor Code",
+      "title": "Something new",
       "review": false,
-      "comment": "User Controller code improved!",
+      "comment": "A random comment",
       "comments": "12"
     }
   ]);
