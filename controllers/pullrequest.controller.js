@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const User = mongoose.model('users');
 const Pullrequest = mongoose.model('pullrequests');
 const Raven = require('raven');
 
