@@ -14,56 +14,59 @@ const Repository = mongoose.model('repositories');
 mongoose.connect(keys.mongoURI);
 
 const BASE_URL = 'https://api.github.com';
-const PUBLIC_REPO = '/user/repos?type=public';
+const ALL_REPOS = '/user/repos';
 const USER_EMAIL = '/user/emails';
 
 async function cronjob() {
-  // Fetch all public repositories and store in DB
+  // Fetch all repositories and store in DB
   const allUsers = await User.find();
   await allUsers.forEach(async user => {
     const axiosConfig = {
       headers: { Authorization: 'token ' + user.accessToken },
     };
 
-    const fetchRepos = await axios.get(
-      `${BASE_URL}${PUBLIC_REPO}`,
-      axiosConfig,
-    );
-    const fetchEmail = await axios.get(
-      `${BASE_URL}${USER_EMAIL}`,
-      axiosConfig,
-    );
+    const fetchRepos = await axios.get(`${BASE_URL}${ALL_REPOS}`, axiosConfig);
+    const fetchEmail = await axios.get(`${BASE_URL}${USER_EMAIL}`, axiosConfig);
 
     // Update user data
     await user.update({
       email: fetchEmail.data[0].email,
     });
 
-    fetchRepos.data.forEach(async publicRepos => {
+    fetchRepos.data.forEach(async allRepos => {
       const existingRepo = await Repository.findOne({
-        githubId: publicRepos.id,
+        githubId: allRepos.id,
       });
 
       const values = {
-        githubId: publicRepos.id,
-        name: publicRepos.name,
-        fullName: publicRepos.full_name,
-        private: publicRepos.private,
-        webUrl: publicRepos.html_url,
-        apiUrl: publicRepos.url,
-        hookUrl: publicRepos.hooks_url,
-        pullUrl: publicRepos.pulls_url,
-        description: publicRepos.description,
-        language: publicRepos.language,
+        githubId: allRepos.id,
+        name: allRepos.name,
+        fullName: allRepos.full_name,
+        private: allRepos.private,
+        webUrl: allRepos.html_url,
+        apiUrl: allRepos.url,
+        hookUrl: allRepos.hooks_url,
+        pullUrl: allRepos.pulls_url,
+        description: allRepos.description,
+        language: allRepos.language,
         owner: user._id,
-        created_at: publicRepos.created_at,
-        updated_at: publicRepos.updated_at,
+        created_at: allRepos.created_at,
+        updated_at: allRepos.updated_at,
       };
 
       if (!existingRepo) {
         const newRepo = await new Repository(values).save();
         await user.update({
-          $push: { _repositories: { repository: newRepo._id } },
+          $push: {
+            _repositories: {
+              repository: newRepo._id,
+              permissions: {
+                admin: allRepos.permissions.admin,
+                push: allRepos.permissions.push,
+                pull: allRepos.permissions.pull,
+              },
+            },
+          },
         });
 
         // Create new Webhook
@@ -78,8 +81,14 @@ async function cronjob() {
           },
         };
 
-        const webhook = await axios.post(publicRepos.hooks_url, webhookData, axiosConfig);
-        await newRepo.update({ hookId: webhook.data.id });
+        if (allRepos.permissions.admin === true) {
+          const webhook = await axios.post(
+            allRepos.hooks_url,
+            webhookData,
+            axiosConfig,
+          );
+          await newRepo.update({ hookId: webhook.data.id });
+        }
       } else {
         await existingRepo.update(values);
       }
