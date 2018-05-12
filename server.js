@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
+const cors = require('cors');
 
 // Load environment configurations
 require('dotenv').config();
@@ -26,6 +27,7 @@ mongoose.connect(keys.mongoURI)
   .catch(e => console.log(e));
 
 // Middlewares
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
