@@ -19,5 +19,6 @@ function generateAccessToken(userId) {
 
 module.exports.generateUserToken = (req, res) => {
   const accessToken = generateAccessToken(req.user.id);
-  res.send({ token: accessToken });
+  res.setHeader('Authorization', accessToken);
+  res.redirect(keys.clientUrl);
 };

@@ -21,7 +21,11 @@ module.exports = app => {
 
   // Repositories
   app.get('/v1/repos', requireAuth(), repoController.listAll);
-  app.get('/v1/repos/:id/pullrequests', requireAuth(), repoController.listPullrequests);
+  app.get(
+    '/v1/repos/:id/pullrequests',
+    requireAuth(),
+    repoController.listPullrequests,
+  );
 
   // Github Webhooks
   app.post('/v1/webhooks', githubMiddleware, webhookController.newEvent);
