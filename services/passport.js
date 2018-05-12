@@ -5,6 +5,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const mongoose = require('mongoose');
 const keys = require('../config/keys');
 const userController = require('../controllers/user.controller');
+const repoController = require('../controllers/repo.controller');
 
 const User = mongoose.model('users');
 
@@ -50,6 +51,7 @@ passport.use(new GitHubStrategy(
       if (existingUser) {
         await existingUser.update({ $set: { accessToken } });
         await userController.update(existingUser);
+        await repoController.update(existingUser);
         return done(null, existingUser);
       }
 
@@ -65,6 +67,7 @@ passport.use(new GitHubStrategy(
         updated_at: profile._json.updated_at,
       }).save();
       await userController.update(user);
+      await repoController.update(user);
       done(null, user);
     } catch (e) {
       return done(e, false);
