@@ -22,3 +22,18 @@ module.exports.me = async (req, res) => {
     res.status(400).send(e);
   }
 };
+
+module.exports.private = async (req, res, next) => {
+  try {
+    await User.findOneAndUpdate(
+      { _id: req.user.id },
+      {
+        permissions: { public: true, private: true, org: false },
+      },
+    );
+    next();
+  } catch (e) {
+    Raven.captureException(e);
+    res.status(400).send(e);
+  }
+};
