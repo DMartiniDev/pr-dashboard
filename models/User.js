@@ -20,6 +20,11 @@ const userSchema = new Schema({
   _repositories: [
     {
       repository: { type: Schema.Types.ObjectId, ref: 'repositories' },
+      permissions: {
+        admin: { type: Boolean },
+        push: { type: Boolean },
+        pull: { type: Boolean },
+      },
     },
   ],
   _organisations: [
