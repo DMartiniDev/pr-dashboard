@@ -15,6 +15,7 @@ const repositorySchema = new Schema({
   language: { type: String },
   owner: { type: Schema.Types.ObjectId, ref: 'users' },
   hookEnabled: { type: Boolean, default: true },
+  color: { type: String, default: '#0bd8be' },
   _pullRequests: [
     {
       _id: false,
@@ -23,6 +24,7 @@ const repositorySchema = new Schema({
   ],
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now },
+  synced_at: { type: Date, default: Date.now },
 });
 
 mongoose.model('repositories', repositorySchema);
