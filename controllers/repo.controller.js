@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const Repository = mongoose.model('repositories');
+const User = mongoose.model('users');
+const Pullrequest = mongoose.model('pullrequests');
 const Raven = require('raven');
 const axios = require('axios');
 const keys = require('../config/keys');
@@ -65,12 +67,15 @@ module.exports.listPullrequests = async (req, res) => {
   }
 };
 
-module.exports.update = async (user) => {
+module.exports.update = async user => {
   const axiosConfig = {
     headers: { Authorization: 'token ' + user.accessToken },
   };
   const ALL_REPOS = '/user/repos';
-  const fetchRepos = await axios.get(`${keys.githubBaseUrl}${ALL_REPOS}`, axiosConfig);
+  const fetchRepos = await axios.get(
+    `${keys.githubBaseUrl}${ALL_REPOS}`,
+    axiosConfig,
+  );
 
   fetchRepos.data.forEach(async allRepos => {
     const existingRepo = await Repository.findOne({
@@ -91,6 +96,7 @@ module.exports.update = async (user) => {
       owner: user._id,
       created_at: allRepos.created_at,
       updated_at: allRepos.updated_at,
+      synced_at: Date.now(),
     };
 
     if (!existingRepo) {
@@ -132,4 +138,32 @@ module.exports.update = async (user) => {
       await existingRepo.update(values);
     }
   });
+};
+
+module.exports.delete = async user => {
+  const oldRepos = await Repository.find({
+    owner: user._id,
+    synced_at: { $lte: new Date().getTime() - 60 * 60 * 1000 * 24 },
+  });
+  if (oldRepos.length > 0) {
+    oldRepos.forEach(async repo => {
+      // Remove old Repos from Users Array
+      await User.update(
+        { _id: user._id },
+        {
+          $pull: {
+            _repositories: {
+              repository: mongoose.Types.ObjectId(repo._id),
+            },
+          },
+        },
+      );
+
+      // Remove Pullrequests of this Repositories
+      await Pullrequest.remove({ repository: repo._id });
+
+      // Remove Repository
+      await Repository.remove({ _id: repo._id });
+    });
+  }
 };
