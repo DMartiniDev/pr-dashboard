@@ -8,6 +8,7 @@ const Raven = require('raven');
 require('../services/raven');
 require('../models/User');
 require('../models/Repository');
+require('../models/Pullrequest');
 
 const userController = require('../controllers/user.controller');
 const repoController = require('../controllers/repo.controller');
@@ -23,13 +24,14 @@ async function cronjob() {
   await allUsers.forEach(async user => {
     await userController.update(user);
     await repoController.update(user);
+    await repoController.delete(user);
   });
   console.log('Cronjob successful finished!');
 }
 
 // Handle Promise rejection
-process.on('unhandledRejection', (err) => {
-  Raven.captureException(err, function () {
+process.on('unhandledRejection', err => {
+  Raven.captureException(err, function() {
     process.exit(1);
   });
 
