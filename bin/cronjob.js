@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const axios = require('axios');
 const Raven = require('raven');
 
+require('../services/raven');
 require('../models/User');
 require('../models/Repository');
 
@@ -99,9 +100,12 @@ async function cronjob() {
 }
 
 // Handle Promise rejection
-process.on('unhandledRejection', (reason, p) => {
-  Raven.captureException('Unhandled Rejection at:', p, 'reason:', reason);
-  console.log('Unhandled Rejection at:', p, 'reason:', reason);
+process.on('unhandledRejection', (err) => {
+  Raven.captureException(err, function () {
+    process.exit(1);
+  });
+
+  console.log('Unhandled Rejection at:', err);
 });
 
 cronjob();
