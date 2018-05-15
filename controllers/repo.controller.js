@@ -169,3 +169,24 @@ module.exports.delete = async user => {
     });
   }
 };
+
+module.exports.color = async (req, res) => {
+  if (!req.body.color) return res.status(404).send();
+
+  const repo = await Repository.findOne({
+    _id: req.params.id,
+    owner: req.user.id,
+  });
+
+  if (!repo) return res.status(404).send();
+
+  try {
+    await repo.update({
+      color: req.body.color,
+    });
+    res.status(204).send();
+  } catch (e) {
+    Raven.captureException(e);
+    res.status(500).send();
+  }
+};
