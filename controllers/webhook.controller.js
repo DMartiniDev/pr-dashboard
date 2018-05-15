@@ -115,10 +115,10 @@ module.exports.enable = async (req, res) => {
       hookId: webhook.data.id,
     });
 
-    res.status(204).send();
+    res.status(200).send({ id: repo._id });
   } catch (e) {
     Raven.captureException(e);
-    res.status(500).send();
+    res.status(500).send(e);
   }
 };
 
@@ -142,7 +142,7 @@ module.exports.disable = async (req, res) => {
       hookId: null,
     });
 
-    res.status(204).send();
+    res.status(200).send({ id: repo._id });
   } catch (e) {
     Raven.captureException(e);
     res.status(500).send();

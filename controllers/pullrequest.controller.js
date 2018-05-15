@@ -24,6 +24,7 @@ module.exports.listAll = async (req, res) => {
         comment: true,
         comments: true,
         repository: true,
+        seen: true,
       },
     ).populate('repository', {
       name: true,
@@ -74,4 +75,20 @@ module.exports.update = async (repo, user) => {
 
     await new Pullrequest(values).save();
   });
+};
+
+module.exports.seen = async (req, res) => {
+  try {
+    await Pullrequest.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        owner: req.user.id,
+      },
+      { $set: { seen: true } },
+    );
+    res.status(200).send({ id: req.params.id });
+  } catch (e) {
+    Raven.captureException(e);
+    res.status(404).send();
+  }
 };
