@@ -130,12 +130,17 @@ module.exports.update = async user => {
       };
 
       if (allRepos.permissions.admin === true) {
-        const webhook = await axios.post(
-          allRepos.hooks_url,
-          webhookData,
-          axiosConfig,
-        );
-        await newRepo.update({ hookId: webhook.data.id });
+        try {
+          const webhook = await axios.post(
+            allRepos.hooks_url,
+            webhookData,
+            axiosConfig,
+          );
+          await newRepo.update({ hookId: webhook.data.id });
+        } catch (e) {
+          console.log(e);
+        }
+
         await pullrequestController.update(newRepo, user.accessToken);
       }
     } else {
