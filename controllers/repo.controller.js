@@ -19,6 +19,8 @@ module.exports.listAll = async (req, res) => {
         webUrl: true,
         description: true,
         hookEnabled: true,
+        color: true,
+        language: true,
       },
     );
     res.status(200).send(repositories);
