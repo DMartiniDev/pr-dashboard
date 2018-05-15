@@ -34,6 +34,12 @@ const userSchema = new Schema({
       organization: { type: Schema.Types.ObjectId, ref: 'organisations' },
     },
   ],
+  socket: [
+    {
+      _id: false,
+      socketId: { type: String },
+    },
+  ],
 });
 
 mongoose.model('users', userSchema);
