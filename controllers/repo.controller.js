@@ -5,6 +5,7 @@ const Pullrequest = mongoose.model('pullrequests');
 const Raven = require('raven');
 const axios = require('axios');
 const keys = require('../config/keys');
+const pullrequestController = require('./pullrequest.controller');
 
 require('../services/raven');
 
@@ -92,7 +93,7 @@ module.exports.update = async user => {
       webUrl: allRepos.html_url,
       apiUrl: allRepos.url,
       hookUrl: allRepos.hooks_url,
-      pullUrl: allRepos.pulls_url,
+      pullUrl: allRepos.pulls_url.replace('{/number}', ''),
       description: allRepos.description,
       language: allRepos.language,
       owner: user._id,
@@ -135,6 +136,7 @@ module.exports.update = async user => {
           axiosConfig,
         );
         await newRepo.update({ hookId: webhook.data.id });
+        await pullrequestController.update(newRepo, user.accessToken);
       }
     } else {
       await existingRepo.update(values);

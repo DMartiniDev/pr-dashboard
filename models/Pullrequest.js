@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const pullrequestSchema = new Schema({
   githubId: { type: String, required: true, unique: true },
-  action: { type: String, required: true },
+  action: { type: String },
   number: { type: String, required: true },
   webUrl: { type: String, required: true },
   apiUrl: { type: String, required: true },

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Pullrequest = mongoose.model('pullrequests');
 const Raven = require('raven');
+const axios = require('axios');
 
 require('../services/raven');
 
@@ -40,4 +41,35 @@ module.exports.listAll = async (req, res) => {
   }
 };
 
-module.exports.update = async user => {};
+module.exports.update = async (repo, accessToken) => {
+  const axiosConfig = {
+    headers: { Authorization: 'token ' + accessToken },
+  };
+  const fetchPulls = await axios.get(repo.pullUrl, axiosConfig);
+
+  fetchPulls.data.forEach(async pull => {
+    const values = {
+      githubId: pull.id,
+      number: pull.number,
+      webUrl: pull.html_url,
+      apiUrl: pull.url,
+      state: pull.state,
+      title: pull.title,
+      comment: pull.body,
+      comments: pull.comments || 0,
+      user: {
+        githubId: pull.user.id,
+        loginName: pull.user.login,
+        picture: pull.user.avatar_url,
+        apiUrl: pull.user.url,
+        webUrl: pull.user.html_url,
+      },
+      created_at: pull.created_at,
+      updated_at: pull.updated_at,
+      closed_at: pull.closed_at,
+      merged_at: pull.merged_at,
+    };
+
+    await new Pullrequest(values).save();
+  });
+};
