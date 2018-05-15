@@ -14,7 +14,7 @@ io.on('connection', function(client){
 
   client.on('disconnect', function(){
     // TODO: Ensure the `client.id` does not exist for any user in the database
-    console.log('Connection dropped: ${client.id}');
+    console.log(`Connection dropped: ${client.id}`);
   });
 });
 
