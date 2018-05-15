@@ -37,7 +37,7 @@ io.on('connection', async function(client) {
   });
 
   client.on('disconnect', async function() {
-    // TODO: Ensure the `client.id` does not exist for any user in the database
+    // Ensure the `client.id` does not exist for any user in the database
     console.log(`Connection dropped: ${client.id}`);
     const remSocket = await User.findOne({
       'socket.socketId': client.id,
