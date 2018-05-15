@@ -1,7 +1,7 @@
 const { io } = require('../setupServer.js');
 
 module.exports.test = (req, res) => {
-  io.emit('pr-update', [
+  pulls = [
     {
       "_id": "5af0778b2bf32a1ebf79c56f",
       "repository": {
@@ -58,31 +58,48 @@ module.exports.test = (req, res) => {
       "comment": "A random comment",
       "comments": "12"
     }
-  ]);
+  ];
+
+  // Send data to the client
+  io.emit('message', {
+    type: 'pull_request',
+    payload: pulls
+  });
 
   res.status(200).send('Updated data for PRs has been sent');
 };
 
 module.exports.reposUpdate = (req, res) => {
-    io.emit('repos-update', [
-        {
-            "_id": "5af0778b2bf32a1ebf79c56a",
-            "name": "pr-dashboard",
-            "fullName": "dkm-coder/pr-dashboard",
-            "private": true,
-            "webUrl": "https://github.com/dkm-coder/pr-dashboard",
-            "hookEnabled": false,
-            "description": "Github Pull Request Dashboard"
-        },
-        {
-            "_id": "123456789098765432123456",
-            "name": "pr-dashboard-client",
-            "fullName": "carrmelo/pr-dashboard-client",
-            "private": false,
-            "webUrl": "https://github.com/carrmelo/pr-dashboard-client",
-            "hookEnabled": true,
-            "description": "Client for PR Dashboard"
-        }
-    ]);
-    res.status(200).send('Updated data for repositories has been sent');
+  repos = [
+    {
+      "_id": "5af0778b2bf32a1ebf79c56a",
+      "name": "pr-dashboard",
+      "fullName": "dkm-coder/pr-dashboard",
+      "private": false,
+      "language": "JavaScript",
+      "webUrl": "https://github.com/dkm-coder/pr-dashboard",
+      "description": "Github Pull Request Dashboard",
+      "hookEnabled": true,
+      "color": "#c2c2c2"
+    },
+    {
+      "_id": "5af0778b2bf32a1ebf79c56b",
+      "name": "go-for-eat",
+      "fullName": "g0g11/go-for-eat-client",
+      "private": false,
+      "language": "Python",
+      "webUrl": "https://github.com/g0g11/go-for-eat-client",
+      "description": "Go4Eat Client",
+      "hookEnabled": false,
+      "color": "#d1d2d3"
+    }
+  ];
+
+  // Send data to the client
+  io.emit('message', {
+    type: 'repos-update',
+    payload: repos
+  });
+
+  res.status(200).send('Updated data for repositories has been sent');
 };
