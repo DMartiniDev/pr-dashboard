@@ -41,9 +41,9 @@ module.exports.listAll = async (req, res) => {
   }
 };
 
-module.exports.update = async (repo, accessToken) => {
+module.exports.update = async (repo, user) => {
   const axiosConfig = {
-    headers: { Authorization: 'token ' + accessToken },
+    headers: { Authorization: 'token ' + user.accessToken },
   };
   const fetchPulls = await axios.get(repo.pullUrl, axiosConfig);
 
@@ -57,6 +57,8 @@ module.exports.update = async (repo, accessToken) => {
       title: pull.title,
       comment: pull.body,
       comments: pull.comments || 0,
+      owner: user._id,
+      repository: repo._id,
       user: {
         githubId: pull.user.id,
         loginName: pull.user.login,
