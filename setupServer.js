@@ -3,11 +3,14 @@ const port = process.env.PORT || 3001;
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
 const mongoose = require('mongoose');
-
 require('./models/User');
 const User = mongoose.model('users');
 
+let socket;
+
 io.on('connection', async function(client) {
+  socket = client;
+
   // A connection with a client has been established
   console.log('New connection: ', client.id);
 
@@ -54,4 +57,5 @@ module.exports = {
   app,
   http,
   io,
+  socket
 };
