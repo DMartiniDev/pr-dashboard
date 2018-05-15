@@ -30,6 +30,8 @@ module.exports.listAll = async (req, res) => {
       private: true,
       webUrl: true,
       description: true,
+      color: true,
+      language: true,
     });
     res.status(200).send(pullrequests);
   } catch (e) {
@@ -37,3 +39,5 @@ module.exports.listAll = async (req, res) => {
     res.status(400).send(e);
   }
 };
+
+module.exports.update = async user => {};
