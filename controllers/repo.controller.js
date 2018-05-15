@@ -141,7 +141,7 @@ module.exports.update = async user => {
           console.log(e);
         }
 
-        await pullrequestController.update(newRepo, user.accessToken);
+        await pullrequestController.update(newRepo, user);
       }
     } else {
       await existingRepo.update(values);
