@@ -28,6 +28,11 @@ module.exports = app => {
 
   // Pull requests
   app.get('/v1/pullrequests', requireAuth(), pullrequestController.listAll);
+  app.patch(
+    '/v1/pullrequests/:id/seen',
+    requireAuth(),
+    pullrequestController.seen,
+  );
 
   // Repositories
   app.get('/v1/repos', requireAuth(), repoController.listAll);
