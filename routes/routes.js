@@ -11,8 +11,17 @@ const requireAuth = require('../middleware/requireAuth');
 module.exports = app => {
   // Authentication
   app.get('/v1/auth/github', authGithubController.auth());
-  app.get('/v1/auth/github/private', requireAuth(), userController.private, authGithubController.private());
-  app.get('/v1/auth/callback', authGithubController.callback(), authJwtController.generateUserToken);
+  app.get(
+    '/v1/auth/github/private',
+    requireAuth(),
+    userController.private,
+    authGithubController.private(),
+  );
+  app.get(
+    '/v1/auth/callback',
+    authGithubController.callback(),
+    authJwtController.generateUserToken,
+  );
 
   // Current User
   app.get('/v1/user/me', requireAuth(), userController.me);
@@ -27,6 +36,9 @@ module.exports = app => {
     requireAuth(),
     repoController.listPullrequests,
   );
+
+  // Repository settings
+  app.patch('/v1/repos/:id/color', requireAuth(), repoController.color);
 
   // Github Webhooks
   app.post('/v1/webhooks', githubMiddleware, webhookController.newEvent);
