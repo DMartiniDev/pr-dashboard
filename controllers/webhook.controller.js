@@ -128,7 +128,7 @@ module.exports.enable = async (req, res) => {
   const axiosConfig = {
     headers: {
       Authorization: 'token ' + req.user.accessToken,
-      'Access-Control-Allow-Origin': '*',
+      crossDomain: true,
     },
   };
   try {
