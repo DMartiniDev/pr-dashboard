@@ -5,6 +5,7 @@ const User = mongoose.model('users');
 const axios = require('axios');
 const keys = require('../config/keys');
 const Raven = require('raven');
+const { socket } = require('../setupServer');
 
 require('../services/raven');
 
@@ -70,6 +71,13 @@ module.exports.newEvent = async (req, res) => {
         $push: { _pullRequests: { pullRequest: pullrequest._id } },
       });
 
+      owner.socket.forEach(client => {
+        socket.nsp.to(client.socketId).emit('message', {
+          type: 'pull_requests',
+          payload: existPullrequest,
+        });
+      });
+
       res.status(201).send({ message: 'Pull request created.' });
     } catch (e) {
       Raven.captureException(e);
@@ -78,6 +86,18 @@ module.exports.newEvent = async (req, res) => {
   } else {
     try {
       await existPullrequest.update(values);
+
+      const owner = await User.findOne({
+        githubId: req.body.repository.owner.id,
+      });
+
+      owner.socket.forEach(client => {
+        socket.nsp.to(client.socketId).emit('message', {
+          type: 'pull_requests',
+          payload: existPullrequest,
+        });
+      });
+
       res.status(201).send({ message: 'Pull request updated.' });
     } catch (e) {
       Raven.captureException(e);
