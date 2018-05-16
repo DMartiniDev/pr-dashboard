@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const cors = require('cors');
 const keys = require('./config/keys');
+const socket = require('./services/socket');
 
 // Load environment configurations
 require('dotenv').config();
@@ -26,6 +27,9 @@ mongoose
   .connect(keys.mongoURI)
   .then(() => console.log('MongoDB connected.'))
   .catch(e => console.log(e));
+
+// Remove Sockets after reboot
+socket.removeSockets();
 
 // Middlewares
 app.use(cors(`[${keys.clientUrl}, ${keys.serverBaseUrl}]`));
