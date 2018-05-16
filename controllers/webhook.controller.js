@@ -71,41 +71,9 @@ module.exports.newEvent = async (req, res) => {
         $push: { _pullRequests: { pullRequest: pullrequest._id } },
       });
 
-      const newPulls = await Pullrequest.find(
-        {
-          owner: owner._id,
-        },
-        {
-          user: true,
-          closed_at: true,
-          merged_at: true,
-          created_at: true,
-          updated_at: true,
-          action: true,
-          number: true,
-          webUrl: true,
-          state: true,
-          title: true,
-          review: true,
-          comment: true,
-          comments: true,
-          repository: true,
-          seen: true,
-        },
-      ).populate('repository', {
-        name: true,
-        fullName: true,
-        private: true,
-        webUrl: true,
-        description: true,
-        color: true,
-        language: true,
-      });
-      console.log('payload', newPulls);
+      const newPulls = await Pullrequest.find({ owner: owner._id });
 
       owner.socket.forEach(client => {
-        console.log('client', client);
-        console.log('client.socketId', client.socketId);
         io.to(client.socketId).emit('message', {
           type: 'pull_request',
           payload: newPulls,
@@ -121,42 +89,11 @@ module.exports.newEvent = async (req, res) => {
     try {
       await existPullrequest.update(values);
 
-      const newPulls = await Pullrequest.find(
-        {
-          owner: owner._id,
-        },
-        {
-          user: true,
-          closed_at: true,
-          merged_at: true,
-          created_at: true,
-          updated_at: true,
-          action: true,
-          number: true,
-          webUrl: true,
-          state: true,
-          title: true,
-          review: true,
-          comment: true,
-          comments: true,
-          repository: true,
-          seen: true,
-        },
-      ).populate('repository', {
-        name: true,
-        fullName: true,
-        private: true,
-        webUrl: true,
-        description: true,
-        color: true,
-        language: true,
-      });
+      const newPulls = await Pullrequest.find({ owner: owner._id });
 
       console.log('payload', newPulls);
 
       owner.socket.forEach(client => {
-        console.log('client', client);
-        console.log('client.socketId', client.socketId);
         io.to(client.socketId).emit('message', {
           type: 'pull_request',
           payload: newPulls,
