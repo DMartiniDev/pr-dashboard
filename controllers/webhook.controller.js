@@ -101,6 +101,7 @@ module.exports.newEvent = async (req, res) => {
         color: true,
         language: true,
       });
+      console.log('payload', newPulls);
 
       owner.socket.forEach(client => {
         console.log('client', client);
