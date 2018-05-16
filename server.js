@@ -37,7 +37,7 @@ app.use(
     origin: ['https://pure-client.herokuapp.com', 'http://localhost:3000'],
     credentials: true,
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
 app.use(bodyParser.json());
