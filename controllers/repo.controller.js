@@ -5,6 +5,7 @@ const Pullrequest = mongoose.model('pullrequests');
 const Raven = require('raven');
 const axios = require('axios');
 const keys = require('../config/keys');
+const { io } = require('../setupServer');
 const pullrequestController = require('./pullrequest.controller');
 
 require('../services/raven');
@@ -146,6 +147,17 @@ module.exports.update = async user => {
     } else {
       await existingRepo.update(values);
     }
+  });
+
+  const newRepos = await Repository.find({
+    owner: user._id,
+  });
+
+  user.socket.forEach(client => {
+    io.to(client.socketId).emit('message', {
+      type: 'repos-update',
+      payload: newRepos,
+    });
   });
 };
 

@@ -26,6 +26,7 @@ async function cronjob() {
     await repoController.update(user);
     await repoController.delete(user);
   });
+
   console.log('Cronjob successful finished!');
 }
 
