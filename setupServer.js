@@ -57,5 +57,5 @@ module.exports = {
   app,
   http,
   io,
-  socket
+  socket,
 };

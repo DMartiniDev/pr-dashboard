@@ -5,6 +5,7 @@ const User = mongoose.model('users');
 const axios = require('axios');
 const keys = require('../config/keys');
 const Raven = require('raven');
+const { io } = require('../setupServer');
 
 require('../services/raven');
 
@@ -50,14 +51,14 @@ module.exports.newEvent = async (req, res) => {
     merged_at: merged_at,
   };
 
+  const owner = await User.findOne({
+    githubId: req.body.repository.owner.id,
+  });
+
   if (!existPullrequest) {
     try {
       const repo = await Repository.findOne({
         githubId: req.body.repository.id,
-      });
-
-      const owner = await User.findOne({
-        githubId: req.body.repository.owner.id,
       });
 
       values.repository = repo;
@@ -70,6 +71,15 @@ module.exports.newEvent = async (req, res) => {
         $push: { _pullRequests: { pullRequest: pullrequest._id } },
       });
 
+      const newPulls = await Pullrequest.find({ owner: owner._id });
+
+      owner.socket.forEach(client => {
+        io.to(client.socketId).emit('message', {
+          type: 'pull_request',
+          payload: newPulls,
+        });
+      });
+
       res.status(201).send({ message: 'Pull request created.' });
     } catch (e) {
       Raven.captureException(e);
@@ -78,6 +88,18 @@ module.exports.newEvent = async (req, res) => {
   } else {
     try {
       await existPullrequest.update(values);
+
+      const newPulls = await Pullrequest.find({ owner: owner._id });
+
+      console.log('payload', newPulls);
+
+      owner.socket.forEach(client => {
+        io.to(client.socketId).emit('message', {
+          type: 'pull_request',
+          payload: newPulls,
+        });
+      });
+
       res.status(201).send({ message: 'Pull request updated.' });
     } catch (e) {
       Raven.captureException(e);
