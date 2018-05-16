@@ -157,6 +157,7 @@ module.exports.disable = async (req, res) => {
   try {
     const url = `${repo.hookUrl}/${repo.hookId}`;
     await axios.delete(url, axiosConfig);
+    await Pullrequest.remove({ owner: req.user.id, repository: repo._id });
     await repo.update({
       hookEnabled: false,
       hookId: null,
