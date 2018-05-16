@@ -34,8 +34,10 @@ socket.removeSockets();
 // Middlewares
 app.use(
   cors({
-    origin: '*',
+    origin: ['https://pure-client.herokuapp.com', 'http://localhost:3000'],
+    credentials: true,
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
+    allowedHeaders: ['Content-Type'],
   }),
 );
 app.use(bodyParser.json());
