@@ -10,6 +10,7 @@ let socket;
 
 io.on('connection', async function(client) {
   socket = client;
+  console.log(socket);
 
   // A connection with a client has been established
   console.log('New connection: ', client.id);
@@ -57,5 +58,5 @@ module.exports = {
   app,
   http,
   io,
-  socket
+  socket,
 };
