@@ -33,6 +33,7 @@ module.exports = app => {
     requireAuth(),
     pullrequestController.seen,
   );
+  app.get('/v1/pullrequests/count', requireAuth(), pullrequestController.count);
 
   // Repositories
   app.get('/v1/repos', requireAuth(), repoController.listAll);
