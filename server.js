@@ -34,11 +34,7 @@ socket.removeSockets();
 // Middlewares
 app.use(
   cors({
-    origin: [
-      'https://pure-client.herokuapp.com',
-      'http://localhost:3000',
-      'http://pure-client.herokuapp.com',
-    ],
+    origin: '*',
     credentials: true,
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
     allowedHeaders: ['Content-Type', 'Authorization'],
