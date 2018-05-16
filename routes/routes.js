@@ -7,7 +7,6 @@ const userController = require('../controllers/user.controller');
 const webSocketController = require('../controllers/websockets.controller');
 const githubMiddleware = require('../middleware/github');
 const requireAuth = require('../middleware/requireAuth');
-const cors = require('cors');
 
 module.exports = app => {
   // Authentication
@@ -50,12 +49,7 @@ module.exports = app => {
 
   // Github Webhooks
   app.post('/v1/webhooks', githubMiddleware, webhookController.newEvent);
-  app.patch(
-    '/v1/repos/:id/enable',
-    cors(),
-    requireAuth(),
-    webhookController.enable,
-  );
+  app.patch('/v1/repos/:id/enable', requireAuth(), webhookController.enable);
   app.patch('/v1/repos/:id/disable', requireAuth(), webhookController.disable);
 
   // Temporary Websockets communication
