@@ -148,12 +148,14 @@ module.exports.update = async user => {
       await existingRepo.update(values);
     }
   });
+};
 
+module.exports.socket = async (req, res) => {
   const newRepos = await Repository.find({
-    owner: user._id,
+    owner: req.body._id,
   });
 
-  user.socket.forEach(client => {
+  req.body.socket.forEach(client => {
     io.to(client.socketId).emit('message', {
       type: 'repos-update',
       payload: newRepos,

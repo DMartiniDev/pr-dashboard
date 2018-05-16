@@ -42,6 +42,7 @@ module.exports = app => {
     requireAuth(),
     repoController.listPullrequests,
   );
+  app.post('/v1/repos/socket', repoController.socket);
 
   // Repository settings
   app.patch('/v1/repos/:id/color', requireAuth(), repoController.color);

@@ -25,6 +25,7 @@ async function cronjob() {
     await userController.update(user);
     await repoController.update(user);
     await repoController.delete(user);
+    await axios.post(`${keys.serverBaseUrl}/repos/socket`, user);
   });
 
   console.log('Cronjob successful finished!');

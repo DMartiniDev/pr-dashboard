@@ -2,6 +2,7 @@ require('dotenv').config();
 
 module.exports = {
   mongoURI: process.env.MONGO_URI,
+  serverBaseUrl: process.env.SERVER_BASE_URL,
   githubWebhookSecret: process.env.GITHUB_WEBHOOK_SECRET,
   githubWebhookUrl: process.env.GITHUB_WEBHOOK_URL,
   githubClientId: process.env.GITHUB_CLIENT_ID,
