@@ -92,3 +92,16 @@ module.exports.seen = async (req, res) => {
     res.status(404).send();
   }
 };
+
+module.exports.count = async (req, res) => {
+  try {
+    const count = await Pullrequest.find({
+      owner: req.user.id,
+      seen: false,
+    });
+    res.status(200).send({ count: count.length });
+  } catch (e) {
+    Raven.captureException(e);
+    res.status(404).send();
+  }
+};
