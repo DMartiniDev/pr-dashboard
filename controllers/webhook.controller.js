@@ -152,6 +152,8 @@ module.exports.newEvent = async (req, res) => {
         language: true,
       });
 
+      console.log('payload', newPulls);
+
       owner.socket.forEach(client => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
