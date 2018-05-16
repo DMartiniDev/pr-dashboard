@@ -71,8 +71,35 @@ module.exports.newEvent = async (req, res) => {
         $push: { _pullRequests: { pullRequest: pullrequest._id } },
       });
 
-      const newPulls = await Pullrequest.find({
-        owner: owner._id,
+      const newPulls = await Pullrequest.find(
+        {
+          owner: owner._id,
+        },
+        {
+          user: true,
+          closed_at: true,
+          merged_at: true,
+          created_at: true,
+          updated_at: true,
+          action: true,
+          number: true,
+          webUrl: true,
+          state: true,
+          title: true,
+          review: true,
+          comment: true,
+          comments: true,
+          repository: true,
+          seen: true,
+        },
+      ).populate('repository', {
+        name: true,
+        fullName: true,
+        private: true,
+        webUrl: true,
+        description: true,
+        color: true,
+        language: true,
       });
 
       owner.socket.forEach(client => {
@@ -93,8 +120,35 @@ module.exports.newEvent = async (req, res) => {
     try {
       await existPullrequest.update(values);
 
-      const newPulls = await Pullrequest.find({
-        owner: owner._id,
+      const newPulls = await Pullrequest.find(
+        {
+          owner: owner._id,
+        },
+        {
+          user: true,
+          closed_at: true,
+          merged_at: true,
+          created_at: true,
+          updated_at: true,
+          action: true,
+          number: true,
+          webUrl: true,
+          state: true,
+          title: true,
+          review: true,
+          comment: true,
+          comments: true,
+          repository: true,
+          seen: true,
+        },
+      ).populate('repository', {
+        name: true,
+        fullName: true,
+        private: true,
+        webUrl: true,
+        description: true,
+        color: true,
+        language: true,
       });
 
       owner.socket.forEach(client => {
