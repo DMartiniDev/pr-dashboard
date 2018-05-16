@@ -6,6 +6,7 @@ const axios = require('axios');
 const keys = require('../config/keys');
 const Raven = require('raven');
 const { io } = require('../setupServer');
+const pullrequestController = require('./pullrequest.controller');
 
 require('../services/raven');
 
@@ -133,6 +134,7 @@ module.exports.enable = async (req, res) => {
       hookEnabled: true,
       hookId: webhook.data.id,
     });
+    await pullrequestController.update(repo, req.user);
 
     res.status(200).send({ id: repo._id });
   } catch (e) {
