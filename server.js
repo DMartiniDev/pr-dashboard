@@ -34,7 +34,7 @@ socket.removeSockets();
 // Middlewares
 app.use(
   cors({
-    origin: [keys.clientUrl, keys.serverBaseUrl],
+    origin: [keys.clientUrl, 'https://pure-client.herokuapp.com'],
   }),
 );
 app.use(bodyParser.json());
