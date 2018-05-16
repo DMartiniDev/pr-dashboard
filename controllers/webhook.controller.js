@@ -74,6 +74,7 @@ module.exports.newEvent = async (req, res) => {
       owner.socket.forEach(client => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
+        console.log('socket', socket);
         socket.nsp.to(client.socketId).emit('message', {
           type: 'pull_requests',
           payload: existPullrequest,
@@ -96,6 +97,7 @@ module.exports.newEvent = async (req, res) => {
       owner.socket.forEach(client => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
+        console.log('socket', socket);
         socket.nsp.to(client.socketId).emit('message', {
           type: 'pull_requests',
           payload: existPullrequest,
