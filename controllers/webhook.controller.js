@@ -107,7 +107,7 @@ module.exports.newEvent = async (req, res) => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
         io.to(client.socketId).emit('message', {
-          type: 'pull_requests',
+          type: 'pull_request',
           payload: newPulls,
         });
       });
@@ -158,7 +158,7 @@ module.exports.newEvent = async (req, res) => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
         io.to(client.socketId).emit('message', {
-          type: 'pull_requests',
+          type: 'pull_request',
           payload: newPulls,
         });
       });
