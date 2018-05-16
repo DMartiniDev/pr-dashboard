@@ -5,7 +5,7 @@ const User = mongoose.model('users');
 const axios = require('axios');
 const keys = require('../config/keys');
 const Raven = require('raven');
-const { socket } = require('../setupServer');
+const { io } = require('../setupServer');
 
 require('../services/raven');
 
@@ -74,13 +74,10 @@ module.exports.newEvent = async (req, res) => {
       owner.socket.forEach(client => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
-        if (socket) {
-          console.log('socket', socket);
-          socket.nsp.to(client.socketId).emit('message', {
-            type: 'pull_requests',
-            payload: existPullrequest,
-          });
-        }
+        io.to(client.socketId).emit('message', {
+          type: 'pull_requests',
+          payload: existPullrequest,
+        });
       });
 
       res.status(201).send({ message: 'Pull request created.' });
@@ -99,13 +96,10 @@ module.exports.newEvent = async (req, res) => {
       owner.socket.forEach(client => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
-        if (socket) {
-          console.log('socket', socket);
-          socket.nsp.to(client.socketId).emit('message', {
-            type: 'pull_requests',
-            payload: existPullrequest,
-          });
-        }
+        io.to(client.socketId).emit('message', {
+          type: 'pull_requests',
+          payload: existPullrequest,
+        });
       });
 
       res.status(201).send({ message: 'Pull request updated.' });
