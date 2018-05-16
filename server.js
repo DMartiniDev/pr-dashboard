@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const cors = require('cors');
+const keys = require('./config/keys');
 
 // Load environment configurations
 require('dotenv').config();
-const keys = require('./config/keys');
 
 // Mongoose models
 require('./models/Pullrequest');
@@ -22,12 +22,13 @@ require('./services/passport');
 require('./services/raven');
 
 // Connect to MongoDB
-mongoose.connect(keys.mongoURI)
+mongoose
+  .connect(keys.mongoURI)
   .then(() => console.log('MongoDB connected.'))
   .catch(e => console.log(e));
 
 // Middlewares
-app.use(cors());
+app.use(cors(`[${keys.clientUrl}, ${keys.serverBaseUrl}]`));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
@@ -40,4 +41,6 @@ require('./routes/routes')(app);
 const PORT = process.env.PORT || 5000;
 const ENV = process.env.NODE_ENV || 'development';
 
-http.listen(PORT, () => console.log(`Server is running on port ${PORT} in ${ENV} mode!`));
+http.listen(PORT, () =>
+  console.log(`Server is running on port ${PORT} in ${ENV} mode!`),
+);
