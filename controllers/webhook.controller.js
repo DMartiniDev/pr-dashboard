@@ -71,12 +71,16 @@ module.exports.newEvent = async (req, res) => {
         $push: { _pullRequests: { pullRequest: pullrequest._id } },
       });
 
+      const newPulls = await Pullrequest.find({
+        owner: req.body.owner.id,
+      });
+
       owner.socket.forEach(client => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
         io.to(client.socketId).emit('message', {
           type: 'pull_requests',
-          payload: existPullrequest,
+          payload: newPulls,
         });
       });
 
@@ -93,12 +97,16 @@ module.exports.newEvent = async (req, res) => {
         githubId: req.body.repository.owner.id,
       });
 
+      const newPulls = await Pullrequest.find({
+        owner: req.body.owner.id,
+      });
+
       owner.socket.forEach(client => {
         console.log('client', client);
         console.log('client.socketId', client.socketId);
         io.to(client.socketId).emit('message', {
           type: 'pull_requests',
-          payload: existPullrequest,
+          payload: newPulls,
         });
       });
 
