@@ -51,14 +51,14 @@ module.exports.newEvent = async (req, res) => {
     merged_at: merged_at,
   };
 
+  const owner = await User.findOne({
+    githubId: req.body.repository.owner.id,
+  });
+
   if (!existPullrequest) {
     try {
       const repo = await Repository.findOne({
         githubId: req.body.repository.id,
-      });
-
-      const owner = await User.findOne({
-        githubId: req.body.repository.owner.id,
       });
 
       values.repository = repo;
@@ -72,7 +72,7 @@ module.exports.newEvent = async (req, res) => {
       });
 
       const newPulls = await Pullrequest.find({
-        owner: req.body.owner.id,
+        owner: owner._id,
       });
 
       owner.socket.forEach(client => {
@@ -93,12 +93,8 @@ module.exports.newEvent = async (req, res) => {
     try {
       await existPullrequest.update(values);
 
-      const owner = await User.findOne({
-        githubId: req.body.repository.owner.id,
-      });
-
       const newPulls = await Pullrequest.find({
-        owner: req.body.owner.id,
+        owner: owner._id,
       });
 
       owner.socket.forEach(client => {
