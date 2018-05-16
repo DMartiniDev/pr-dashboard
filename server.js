@@ -35,6 +35,7 @@ socket.removeSockets();
 app.use(
   cors({
     origin: '*',
+    methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
   }),
 );
 app.use(bodyParser.json());
