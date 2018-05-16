@@ -88,10 +88,7 @@ module.exports.newEvent = async (req, res) => {
   } else {
     try {
       await existPullrequest.update(values);
-
       const newPulls = await Pullrequest.find({ owner: owner._id });
-
-      console.log('payload', newPulls);
 
       owner.socket.forEach(client => {
         io.to(client.socketId).emit('message', {
