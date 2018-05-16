@@ -32,7 +32,7 @@ mongoose
 socket.removeSockets();
 
 // Middlewares
-app.use(cors(`[${keys.clientUrl}, ${keys.serverBaseUrl}]`));
+app.use(cors(`{ origin: [${keys.clientUrl}, ${keys.serverBaseUrl}] }`));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
