@@ -6,7 +6,6 @@ const User = mongoose.model('users');
 module.exports.removeSockets = async () => {
   const allUsers = await User.find({});
   allUsers.forEach(async user => {
-    console.log(user.socket);
     await user.update({ $set: { socket: [] } });
   });
 };
