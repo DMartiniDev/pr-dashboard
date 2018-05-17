@@ -13,6 +13,28 @@ require('../services/raven');
 module.exports.newEvent = async (req, res) => {
   // First message to test the Webhook from Github
   if (req.body.zen && req.body.hook) return res.status(200).send();
+  if (!req.body.pull_request && req.body.comment) {
+    const comment = await Pullrequest.findOne({
+      apiUrl: req.body.issue.pull_request.url,
+    });
+    await comment.update({
+      $set: { comments: req.body.issue.comments, seen: false },
+    });
+
+    const owner = await User.findOne({
+      githubId: req.body.repository.owner.id,
+    });
+
+    const newPulls = await Pullrequest.find({ owner: owner._id });
+
+    owner.socket.forEach(client => {
+      io.to(client.socketId).emit('message', {
+        type: 'pull_request',
+        payload: newPulls,
+      });
+    });
+    return res.status(200).send();
+  }
 
   const {
     id,
@@ -118,7 +140,7 @@ module.exports.enable = async (req, res) => {
   const webHookData = {
     name: 'web',
     active: true,
-    events: ['pull_request'],
+    events: ['pull_request', 'issue_comment'],
     config: {
       url: keys.githubWebhookUrl,
       content_type: 'json',
