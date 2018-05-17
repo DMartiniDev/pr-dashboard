@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const Pullrequest = mongoose.model('pullrequests');
 const Repository = mongoose.model('repositories');
 const User = mongoose.model('users');
-const axios = require('axios');
 const keys = require('../config/keys');
 const Raven = require('raven');
 const { io } = require('../setupServer');
+const fetch = require('node-fetch');
 const pullrequestController = require('./pullrequest.controller');
 
 require('../services/raven');
@@ -125,14 +125,20 @@ module.exports.enable = async (req, res) => {
       secret: keys.githubWebhookSecret,
     },
   };
-  const axiosConfig = {
-    headers: { Authorization: 'token ' + req.user.accessToken },
+  const config = {
+    method: 'POST',
+    body: JSON.stringify(webHookData),
+    headers: {
+      Authorization: 'token ' + req.user.accessToken,
+    },
   };
   try {
-    const webhook = await axios.post(repo.hookUrl, webHookData, axiosConfig);
+    const webhook = await fetch(repo.hookUrl, config);
+    const data = await webhook.json();
+
     await repo.update({
       hookEnabled: true,
-      hookId: webhook.data.id,
+      hookId: data.id,
     });
     await pullrequestController.update(repo, req.user);
 
@@ -152,13 +158,16 @@ module.exports.disable = async (req, res) => {
 
   if (!repo) return res.status(404).send();
 
-  const axiosConfig = {
-    headers: { Authorization: 'token ' + req.user.accessToken },
+  const config = {
+    method: 'DELETE',
+    headers: {
+      Authorization: 'token ' + req.user.accessToken,
+    },
   };
 
   try {
     const url = `${repo.hookUrl}/${repo.hookId}`;
-    await axios.delete(url, axiosConfig);
+    await fetch(url, config);
     await Pullrequest.remove({ owner: req.user.id, repository: repo._id });
     await repo.update({
       hookEnabled: false,
