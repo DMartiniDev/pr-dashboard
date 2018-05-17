@@ -13,6 +13,15 @@ require('../services/raven');
 module.exports.newEvent = async (req, res) => {
   // First message to test the Webhook from Github
   if (req.body.zen && req.body.hook) return res.status(200).send();
+  if (!req.body.pull_request && req.body.comment) {
+    const comment = await Pullrequest.findOne({
+      webUrl: req.body.issue.pull_request.url,
+    });
+    await comment.update({
+      $set: { comments: req.body.issue.comments, seen: false },
+    });
+    return res.status(200).send();
+  }
 
   const {
     id,

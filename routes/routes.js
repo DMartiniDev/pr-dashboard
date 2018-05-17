@@ -13,8 +13,6 @@ module.exports = app => {
   app.get('/v1/auth/github', authGithubController.auth());
   app.get(
     '/v1/auth/github/private',
-    requireAuth(),
-    userController.private,
     authGithubController.private(),
   );
   app.get(
