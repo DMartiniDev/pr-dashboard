@@ -17,6 +17,7 @@ module.exports.newEvent = async (req, res) => {
     const comment = await Pullrequest.findOne({
       webUrl: req.body.issue.pull_request.url,
     });
+    console.log(comment);
     await comment.update({
       $set: { comments: req.body.issue.comments, seen: false },
     });
