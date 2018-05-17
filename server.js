@@ -34,7 +34,7 @@ socket.removeSockets();
 // Middlewares
 app.use(
   cors({
-    origin: '*',
+    origin: keys.clientUrl,
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
   }),
 );

@@ -126,19 +126,20 @@ module.exports.enable = async (req, res) => {
       secret: keys.githubWebhookSecret,
     },
   };
-  const axiosConfig = {
+  const config = {
     method: 'POST',
-    body: webHookData,
+    body: JSON.stringify(webHookData),
     headers: {
       Authorization: 'token ' + req.user.accessToken,
     },
   };
   try {
-    const webhook = await fetch(repo.hookUrl, axiosConfig);
-    // const webhook = await axios.post(repo.hookUrl, webHookData, axiosConfig);
+    const webhook = await fetch(repo.hookUrl, config);
+    const data = await webhook.json();
+
     await repo.update({
       hookEnabled: true,
-      hookId: webhook.data.id,
+      hookId: data.id,
     });
     await pullrequestController.update(repo, req.user);
 
