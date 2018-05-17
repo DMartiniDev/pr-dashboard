@@ -126,13 +126,15 @@ module.exports.enable = async (req, res) => {
     },
   };
   const axiosConfig = {
+    method: 'POST',
+    body: webHookData,
     headers: {
       Authorization: 'token ' + req.user.accessToken,
-      crossDomain: true,
     },
   };
   try {
-    const webhook = await axios.post(repo.hookUrl, webHookData, axiosConfig);
+    const webhook = await fetch(repo.hookUrl, axiosConfig);
+    // const webhook = await axios.post(repo.hookUrl, webHookData, axiosConfig);
     await repo.update({
       hookEnabled: true,
       hookId: webhook.data.id,

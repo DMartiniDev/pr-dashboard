@@ -34,10 +34,8 @@ socket.removeSockets();
 // Middlewares
 app.use(
   cors({
-    origin: true,
-    credentials: true,
+    origin: '*',
     methods: 'GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE',
-    allowedHeaders: ['Content-Type', 'Authorization'],
   }),
 );
 app.use(bodyParser.json());
