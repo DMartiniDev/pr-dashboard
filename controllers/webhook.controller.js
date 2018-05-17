@@ -134,6 +134,7 @@ module.exports.enable = async (req, res) => {
     },
   };
   try {
+    console.log(repo.hookUrl);
     const webhook = await fetch(repo.hookUrl, config);
     const data = await webhook.json();
     console.log(data);
