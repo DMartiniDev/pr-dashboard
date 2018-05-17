@@ -136,6 +136,7 @@ module.exports.enable = async (req, res) => {
   try {
     const webhook = await fetch(repo.hookUrl, config);
     const data = await webhook.json();
+    console.log(data);
 
     await repo.update({
       hookEnabled: true,
