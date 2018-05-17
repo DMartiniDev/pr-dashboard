@@ -160,13 +160,16 @@ module.exports.disable = async (req, res) => {
 
   if (!repo) return res.status(404).send();
 
-  const axiosConfig = {
-    headers: { Authorization: 'token ' + req.user.accessToken },
+  const config = {
+    method: 'DELETE',
+    headers: {
+      Authorization: 'token ' + req.user.accessToken,
+    },
   };
 
   try {
     const url = `${repo.hookUrl}/${repo.hookId}`;
-    await axios.delete(url, axiosConfig);
+    await fetch(url, config);
     await Pullrequest.remove({ owner: req.user.id, repository: repo._id });
     await repo.update({
       hookEnabled: false,
