@@ -15,7 +15,7 @@ module.exports.newEvent = async (req, res) => {
   if (req.body.zen && req.body.hook) return res.status(200).send();
   if (!req.body.pull_request && req.body.comment) {
     const comment = await Pullrequest.findOne({
-      webUrl: req.body.issue.pull_request.url,
+      apiUrl: req.body.issue.pull_request.url,
     });
     console.log(comment);
     await comment.update({
