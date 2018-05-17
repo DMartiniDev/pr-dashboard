@@ -135,7 +135,10 @@ module.exports.enable = async (req, res) => {
   };
   try {
     console.log(repo.hookUrl);
-    const webhook = await fetch(repo.hookUrl, config);
+    const webhook = await fetch(
+      'https://api.github.com/repos/g0g11/test44/hooks/',
+      config,
+    );
     const data = await webhook.json();
     console.log(data);
 
