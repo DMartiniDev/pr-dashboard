@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Pullrequest = mongoose.model('pullrequests');
 const Repository = mongoose.model('repositories');
 const User = mongoose.model('users');
-const axios = require('axios');
 const keys = require('../config/keys');
 const Raven = require('raven');
 const { io } = require('../setupServer');
@@ -134,13 +133,8 @@ module.exports.enable = async (req, res) => {
     },
   };
   try {
-    console.log(repo.hookUrl);
-    const webhook = await fetch(
-      'https://api.github.com/repos/g0g11/test44/hooks',
-      config,
-    );
+    const webhook = await fetch(repo.hookUrl, config);
     const data = await webhook.json();
-    console.log(data);
 
     await repo.update({
       hookEnabled: true,
@@ -150,7 +144,6 @@ module.exports.enable = async (req, res) => {
 
     res.status(200).send({ id: repo._id });
   } catch (e) {
-    console.log('error', e);
     Raven.captureException(e);
     res.status(500).send(e);
   }
