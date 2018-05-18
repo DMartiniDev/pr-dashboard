@@ -8,7 +8,7 @@ require('../services/raven');
 module.exports.listAll = async (req, res) => {
   try {
     const pullrequests = await Pullrequest.find(
-      { owner: req.user.id },
+      { owner: req.user.id, closed_at: null },
       {
         user: true,
         closed_at: true,
